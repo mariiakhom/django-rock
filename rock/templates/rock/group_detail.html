@@ -1,0 +1,65 @@
+{% extends 'rock/base.html' %}
+{% load static %}
+
+{% block title %}{{ group }}{% endblock %}
+
+{% block main %}
+
+<p class="text-black text-center fs-2"><b>{{ group }}</b></p>
+
+<div class="row my-3 justify-content-between">
+    <div class="col-3">
+        <p class="text-black fs-4">
+            Formed in <b>{{ group.formed }}</b>
+        </p>
+    </div>
+    <div class="col-3">
+        <p class="text-light fs-4">
+            Overall rating:
+            <img src="{% static 'rock/img/star.png' %}" width="30">
+            <b>{{ rating|floatformat:1 }}</b>
+        </p>
+    </div>
+</div>
+
+<div class="row my-5 justify-content-between">
+    <div class="col-6">
+        <img src="{{ group.portrait.url }}" class="w-100 object-fit-contain text-center">
+    </div>
+    <div class="col-4">
+        <p class="text-black text-decoration-none fs-3">Songs:</p>
+        {% for s in group.songs.all %}
+        <div class="row justify-content-between my-1 border-bottom border-secondary">
+            <div class="col-2 p-2">
+                <img src="{{ s.poster.url }}" class="h-100 w-100">
+            </div>
+            <div class="col-6">
+                <p class="text-white fs-5">
+                    <a href="{{ s.url_detail }}" class="text-black text-decoration-none">
+                        <b>{{ s }}</b>
+                    </a>
+                </p>
+            </div>
+            <div class="col-2">
+                <p class="text-black fs-5">{{ s.year }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    
+    </div>
+</div>
+
+<div class="row my-5">
+    <div class="col-6">
+        {% if group.history %}
+        <p class="text-white" style="text-align: justify;">
+            {{ group.history.read.decode }}
+        </p>
+        <hr class="border border-white">
+        {% endif %}
+    </div>
+</div>
+
+
+
+{% endblock %}

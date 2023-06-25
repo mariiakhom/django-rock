@@ -1,0 +1,26 @@
+{% extends 'rock/base.html' %}
+{% load static %}
+
+{% block title %}All Groups{% endblock %}
+
+{% block main %}
+
+<p class="text-black text-center fs-2"><b>All Groups</b></p>
+
+<div class="row">
+{% for g in object_list %}
+
+<div class="col-6 mb-1 pb-4">
+    <a href="{{ g.url_detail }}" class="text-decoration-none">
+    <p class="text-danger text-center fs-4"><b>{{ g.name }}</b></p>
+    </a>
+    <img src="{{ g.portrait.url }}" class="h-75 w-100 rounded p-2 mb-1 border border-black">
+    <p class="text-white text-center fs-5">
+        <img src="{% static 'rock/img/star.png' %}" width="30">
+        Overall rating: <b>{{ g.rating|floatformat:1 }}</b></p>
+        
+</div>
+{% endfor %}
+</div>
+
+{% endblock %}

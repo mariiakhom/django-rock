@@ -1,0 +1,108 @@
+{% extends 'rock/base.html' %}
+{% load static %}
+
+{% block title %}{{ song }}{% endblock %}
+
+{% block main %}
+
+<p class="text-black text-center fs-3"><b>{{ song }}</b></p>
+
+<div class="row my-5 justify-content-between">
+    <div class="col-5">
+        <p class="text-black fs-4">
+            Released in <b>{{ song.year }}</b>
+        </p>
+        <p class="text-light fs-3">
+            {% if user.is_authenticated %}
+            {% if song in user.playlist.all %}
+            {% if song.number_of_other_wishing_to_listen %}
+            <span class="text-white fw-light fs-5">
+                This song wants to be listened by {{ song.number_of_other_wishing_to_listen }}
+                other user{{ song.number_of_other_wishing_to_listen|pluralize }}
+            </span>
+            {% endif %}
+            <a href="{% url 'rock:playlist-change' pk=song.id %}" class="btn btn-warning text-decoration-none">
+                <i class="fa-solid fa-check"></i>
+                <b>In Playlist</b>
+            </a>
+            {% else %}
+            <a href="{% url 'rock:playlist-change' pk=song.id %}" class="btn btn-outline-warning text-decoration-none">
+                <i class="fa-solid fa-plus"></i>
+                Add to playlist
+            </a>
+            {% endif %}
+            {% endif %}
+        </p>
+        <img src="{{ song.poster.url }}" class="h-75 w-100 rounded p-2 mb-1 border border-black">
+    </div>
+    <div class="col-6 text-end">
+        <div class="row my-5 justify-content-between">
+            <iframe width="700" height="400"
+                src="https://www.youtube.com/embed/{{ song.trailer|default_if_none:'kLDIAVN4Vw0' }}"
+                title="YouTube video player" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen></iframe>
+            <p class="text-black text-center fs-4 mt-4">
+                tags:
+                {% for tag in song.tags.all %}
+                <a href="#" class="btn btn-outline-white text-decoration-none fs-5 mb-1">
+                    {{ tag.name }}
+                </a>
+                {% endfor %}
+                <br>
+                <p class="text-black text-center text-decoration-none fs-3 mt-1">
+                Group
+                <a href="{{ song.group.url_detail }}" class="text-primary text-decoration-none">
+                {{ song.group }}
+                </a></p>
+            
+        </p>
+        </div>
+    </div>
+</div>
+
+
+<div class="col-6 my-5 justify-content-between">
+        <p class="fs-3 text-white">More like this:
+            {% for ss in similar_songs %}
+        <div class="row justify-content-between my-3 border-bottom border-white">
+            <div class="col-2 p-2">
+                <img src="{{ ss.poster.url }}" class="w-75">
+            </div>
+            <div class="col-6">
+                <p class="text-white fs-5">
+                    <a href="{{ ss.url_detail }}" class="text-white text-decoration-none">
+                        {{ ss }}
+                    </a>
+                </p>
+            </div>
+            <div class="col-2">
+                <p class="text-white fs-5">{{ ss.year }}</p>
+            </div>
+        </div>
+        {% endfor %}
+        </p>
+    </div>
+    <div class="col-6 pb-5">
+        {% if song.comments.exists %}
+        <p class="text-white fs-3">Comments:</p>
+        {% for c in song.comments.all %}
+        <p class="text-secondary">
+            <img src="{{ c.user.addon.userpic.url }}" width="40" class="border border-white">
+            <span class="text-white">{{ c.user }}: {{ c.text }}</span>
+            {{ c.published|timesince }} ago
+        </p>
+        {% endfor %}
+        <hr class="border border-secondary">
+        {% endif %}
+        {% if user.is_authenticated %}
+        <form action="{% url 'rock:add-comment' pk=song.id %}" method="post">
+            {% csrf_token %}
+            {{ c_form }}
+        </form>
+        {% endif %}
+    </div>
+</div>
+
+
+{% endblock %}

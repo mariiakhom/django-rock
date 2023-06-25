@@ -1,0 +1,57 @@
+{% extends 'rock/base.html' %}
+{% load static %}
+
+{% block title %}search{% endblock %}
+
+{% block main %}
+
+<p class="text-black fs-2"><b>Search by "{{search}}":</b></p>
+
+{% if songs %}
+
+<p class="text-white fs-4">Found songs ({{songs|length}}):</p>
+
+<div class="row">
+    {% for s in songs %}
+
+    <div class="col-3">
+        <img src="{{ s.poster.url }}" class="h-75 w-100 rounded p-2 mb-1 border border-black">
+        <p class="text-white fs-5">
+            <img src="{% static 'rock/img/star.png' %}" width="30">
+            {{ s.rating }}
+        </p>
+        <a href="{{ s.url_detail }}" class="text-decoration-none">
+            <p class="text-black fs-5"><b>{{ s.title }}</b></p>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+{% endif %}
+
+
+{% if groups %}
+
+<p class="text-white fs-4 mt-5">Found groups ({{groups|length}}):</p>
+
+<div class="row">
+    {% for g in groups %}
+
+    <div class="col-3 mb-3">
+        <img src="{{ g.portrait.url }}" class="h-75 w-100 rounded p-2 mb-1 border border-black">
+        <p class="text-white fs-5">
+            <img src="{% static 'rock/img/star.png' %}" width="30">
+            {{ g.rating|default_if_none:"0.0"|floatformat:1 }}
+        </p>
+        <a href="{{ g.url_detail }}" class="text-decoration-none">
+            <p class="text-black fs-5"><b>{{ g }}</b></p>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+{% endif %}
+
+
+
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'rock/base.html' %}
+{% load static %}
+
+{% block title %}All Songs{% endblock %}
+
+{% block main %}
+
+<p class="text-black fs-3">All Songs</p>
+
+<div class="row">
+{% for s in object_list %}
+
+<div class="col-4">
+    <img src="{{ s.poster.url }}" class="h-75 w-100 rounded p-2 mb-1 border border-black">
+    <p class="text-white fs-4">
+        <img src="{% static 'rock/img/star.png' %}" width="30">
+        {{ s.rating }}
+    </p>
+    <a href="{{ s.url_detail }}" class="text-decoration-none">
+        <p class="text-white fs-5">{{ s.title }}</p>
+    </a>
+    {% if s.trailer %}
+    <a href="https://youtu.be/{{ s.trailer }}" target="_blank" class="text-black text-decoration-none">
+        <img src="{% static 'rock/img/play.png' %}" width="25">
+        Watch trailer
+    </a>
+    {% endif %}
+</div>
+{% endfor %}
+</div>
+
+{% for contact in page_obj %}
+{# Each "contact" is a Contact model object. #}
+{{ contact.full_name|upper }}<br>
+
+{% endfor %}
+
+<div class="row justify-content-between mt-5">
+    <div class="col-2 text-start">
+        {% if page_obj.has_previous %}
+        <a class="text-black text-decoration-none" href="?page=1"><b>&laquo; first</b></a>
+        <a class="text-black text-decoration-none" href="?page={{ page_obj.previous_page_number }}"><b>previous</b></a>
+        {% endif %}
+    </div>
+    <div class="col-2">
+        <p class="text-black text-decoration-none">
+            <b>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</b>
+        </p>
+    </div>
+    <div class="col-2">
+        {% if page_obj.has_next %}
+        <a class="text-black text-decoration-none" href="?page={{ page_obj.next_page_number }}"><b>next</b></a>
+        <a class="text-black text-decoration-none" href="?page={{ page_obj.paginator.num_pages }}"><b>last &raquo;</b></a>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

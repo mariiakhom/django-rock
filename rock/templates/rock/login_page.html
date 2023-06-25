@@ -1,0 +1,36 @@
+{% extends 'rock/base.html' %}
+{% load static %}
+
+{% block title %}User Authentication{% endblock %}
+
+{% block main %}
+
+<p class="text-black fs-3 mt-5"><b>User Authentication</b></p>
+
+<div class="row my-3 justify-content-between">
+    <div class="col-3 text-black">
+        <form action="{% url 'rock:user-sign-in' %}" method="post">
+            {% csrf_token %}
+            <div class="my-2">
+                <label for="">Username</label>
+                <input type="text" name="username" class="form-control" value="{{ last_username }}">
+            </div>
+            <div class="my-2">
+                <label for="">Password</label>
+                <input type="password" name="password" class="form-control">
+            </div>
+            <div class="my-4 d-grid gap-2">
+                <input type="submit" value="Sign In" class="btn btn-warning">
+            </div>
+            <input type="hidden" name="next" value="{{ next }}">
+            {% if message %}
+            <p class="text-black">
+                {{ message }}
+            </p>
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+
+{% endblock %}

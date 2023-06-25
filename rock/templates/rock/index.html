@@ -1,0 +1,106 @@
+{% extends 'rock/base.html' %}
+{% load static %}
+
+{% block title %}American Rock Groups{% endblock %}
+
+{% block main %}
+
+
+<div class="row mt-6 justify-content-around">
+    <main role="main">
+        <section class="jumbotron text-center">
+            <div class="container">
+                <h1 class="jumbotron-heading"><b>American Rock Groups</b></h1>
+                <p class="lead text-black mt-4">"Good music comes out of people playing together, knowing what they want to
+                    do and going for it."
+                    <br>
+                    - Keith Richards.
+                </p>
+            </div>
+        </section>
+</div>
+
+
+<p class="text-black text-center fs-3 mt-5 mb-5"><b>My Favourite Groups</b></p>
+{% for g in groups %}
+<div class="card-center row row-cols-md-1 mx-5 px-5 mb-3 text-center">
+    <div class="col-3">
+        <div class="card mb-4 rounded-3 border-black shadow-sm">
+            <div class="card-header py-3 text-bg-danger p-2 text-dark bg-opacity-75 border-black">
+                <h4 class="my-0">
+                    <a href="{{ g.url_detail }}" class="text-decoration-none">
+                        <p class="text-light fs-3 pt-2"><b>{{ g.name }}</b></p>
+                    </a>
+                </h4>
+            </div>
+        <p class="text-black fs-4">
+            <img src="{{ g.portrait.url }}" class="h-75 w-75 p-2 mb-1">
+        <h1 class="text-black text-center fs-3"><b>Formed in </b><small class="card-title"><b>{{ g.formed }}</b></small>
+        </h1>
+        </p>
+        <button type="button" class="w-100 btn btn-lg btn-outline-danger">
+            <a href="{{ g.url_detail }}" class="text-decoration-none">
+                <p class="text-black text-center fs-4 mb-1">More about this group</p>
+            </a>        
+        </button>
+        </div>
+    </div>
+</div>
+{% endfor %}
+</main>
+
+
+<p class="text-black text-center fs-3 mt-5 pt-4 mb-5"><b>My Favourite Songs</b></p>
+<div class="row">
+    {% for s in songs %}
+    <div class="col">
+        <img src="{{ s.poster.url }}" class="h-75 w-100 rounded p-2 mb-1 border border-black">
+        <p class="text-light fs-4">
+            <img src="{% static 'rock/img/star.png' %}" width="30">
+            {{ s.rating }}
+        </p>
+        <a href="{{ s.url_detail }}" class="text-decoration-none">
+            <p class="text-light fs-5">{{ s.title }}</p>
+        </a>
+        {% if s.trailer %}
+        <a href="https://youtu.be/{{ s.trailer }}" target="_blank" class="text-warning text-decoration-none">
+            <img src="{% static 'rock/img/play.png' %}" width="25">
+            Watch trailer
+        </a>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+
+{% if user.is_authenticated and user.playlist.exists %}
+<p class="text-black fs-3 mt-5 pt-5 pb-3 mb-5"><b>{{ user }}'s playlist:</b></p>
+<div class="row">
+{% for s in user.playlist.all %}
+
+<div class="col-2">
+    <img src="{{ s.poster.url }}" class="h-50 w-75 rounded p-2 mb-1 border border-black">
+    <p class="text-light fs-4">
+        <img src="{% static 'rock/img/star.png' %}" width="30">
+        {{ s.rating }}
+    </p>
+    <a href="{{ s.url_detail }}" class="text-decoration-none">
+        <p class="text-light fs-5">{{ s.title }}</p>
+    </a>
+    
+</div>
+{% endfor %}
+</div>
+{% endif %}
+
+
+<footer class="text-body-primary py-5 mt-5 mb-5 text-decoration-none">
+    <div class="col-2 text-primary">
+        <p class="float-end text-decoration-none fs-4 mb-1">
+            <a href="">Back to the top</a>
+        </p>
+    </div>
+</footer>
+
+
+{% endblock %}
